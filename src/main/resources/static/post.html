@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/input.css">
+
+</head>
+<body>
+
+<h1>Here you can post something for everyone to see! </h1>
+
+<form>
+    <div><input class="question" id="hashtag" required autocomplete="off" placeholder="#hashtag" /></div>
+    <br />
+    <div><input class="question" id="content" required autocomplete="off" placeholder="What would you like to post?"></div>
+
+    <button  class="save-btn" id="btn-save">Save</button>
+</form>
+<p id="status"></p>
+<p><a href="home.html">Back to Homepage</a></p>
+
+<script>
+
+    const POST_URL = sessionStorage.getItem("POST_URL");
+
+    document.getElementById("btn-save").onclick = (evt)=>{
+        evt.preventDefault()
+        const newPost = {}
+        //TODO Needs user ID connected
+        newPost.hashtag = document.getElementById("hashtag").value
+        newPost.content = document.getElementById("content").value
+
+
+        const options = {
+            method: "POST",
+            headers : {
+                'Content-Type' : 'application/json'
+            },
+            body: JSON.stringify(newPost)
+        }
+        console.log(options)
+        fetch(POST_URL,options)
+            .then(res=>res.json())
+            .then(post=> {
+                document.getElementById("status").innerText = JSON.stringify(post)
+            })
+    }
+
+</script>
+
+
+</body>
+</html>

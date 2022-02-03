@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/input.css">
+</head>
+<body>
+
+<form autocomplete='off' id="login/register" class='loginregisterform'>
+    <div class='control'>
+            </div>
+
+    <div class='control block-cube block-input'>
+        <input id="post-id" placeholder="Add the id on your post">
+        <div class='bg-top'>
+            <div class='bg-inner'></div>
+        </div>
+        <div class='bg-right'>
+            <div class='bg-inner'></div>
+        </div>
+        <div class='bg'>
+            <div class='bg-inner'></div>
+        </div>
+    </div>
+    <button class='btn block-cube block-cube-hover' id="btn-find" type=button>
+        <div class='bg-top'>
+            <div class='bg-inner'></div>
+        </div>
+        <div class='bg-right'>
+            <div class='bg-inner'></div>
+        </div>
+        <div class='bg'>
+            <div class='bg-inner'></div>
+        </div>
+        <div class='text'>
+            Find post 🔎
+        </div>
+    </button>
+
+
+    <p id="error-msg" style="color: red"></p>
+
+    <p>POST ID: <span id="id-for-edit"></span></p>
+
+
+    <div class='control block-cube block-input'>
+        <input id="hashtag" placeholder="hashtag#" type='text'>
+        <div class='bg-top'>
+            <div class='bg-inner'></div>
+        </div>
+        <div class='bg-right'>
+            <div class='bg-inner'></div>
+        </div>
+        <div class='bg'>
+            <div class='bg-inner'></div>
+        </div>
+    </div>
+    <div class='control block-cube block-input'>
+
+        <input id="content" placeholder="content" type='text'>
+        <div class='bg-top'>
+            <div class='bg-inner'></div>
+        </div>
+        <div class='bg-right'>
+            <div class='bg-inner'></div>
+        </div>
+        <div class='bg'>
+            <div class='bg-inner'></div>
+        </div>
+    </div>
+    <button class='btn block-cube block-cube-hover' id="btn-save" type=submit>
+        <div class='bg-top'>
+            <div class='bg-inner'></div>
+        </div>
+        <div class='bg-right'>
+            <div class='bg-inner'></div>
+        </div>
+        <div class='bg'>
+            <div class='bg-inner'></div>
+        </div>
+        <div class='text'>
+            Save ✔
+        </div>
+    </button>
+</form>
+<hr>
+
+
+<p id="status"></p>
+<p><a href="home.html">🏠</a></p>
+
+
+<script>
+
+    const POST_URL = sessionStorage.getItem("POST_URL");
+
+    async function handleHttpErrorsAsync(res) {
+        if (!res.ok) {
+            const errorResponse = await res.json();
+            const error = new Error(errorResponse.message)
+            error.apiError = errorResponse
+            throw error
+        }
+        return res.json()
+    }
+
+    document.getElementById("btn-find").onclick = () => {
+        fetch(POST_URL + "/" + document.getElementById("post-id").value)
+            .then(handleHttpErrorsAsync)
+            .then(e => {
+                document.getElementById("id-for-edit").textContent = e.id
+                document.getElementById("hashtag").value = e.hashtag
+                document.getElementById("content").value = e.content
+            })
+            .catch(e => document.getElementById("error-msg").innerText = "Something went wrong: " + e.message)
+    }
+
+    document.getElementById("btn-save").onclick = (evt) => {
+        evt.preventDefault()
+        const newPost = {}
+        newPost.hashtag = document.getElementById("hashtag").value
+        newPost.content = document.getElementById("content").value
+
+        const options = {
+            method: "PUT",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newPost)
+        }
+        fetch(POST_URL + "/" + document.getElementById("post-id").value, options)
+            .then(res => res.json())
+            .then(p => document.getElementById("status").innerText = JSON.stringify(p))
+    }
+
+
+</script>
+</body>
+</html>

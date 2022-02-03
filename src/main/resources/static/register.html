@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register Page</title>
+    <link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+
+<h1>Register</h1>
+
+<!-- register -->
+<form autocomplete='off' class='loginregisterform' action="/register" method="POST">
+    <div class='control'>
+        <h1>
+            Register
+        </h1>
+    </div>
+    <div class='control block-cube block-input'>
+        <!--        Username-->
+        <input id="username" name="username" placeholder='Username' type='text' required>
+        <div class='bg-top'>
+            <div class='bg-inner'></div>
+        </div>
+        <div class='bg-right'>
+            <div class='bg-inner'></div>
+        </div>
+        <div class='bg'>
+            <div class='bg-inner'></div>
+        </div>
+    </div>
+    <div class='control block-cube block-input'>
+        <!--        Userpassword-->
+        <input id="password" name="password" placeholder='Password' type='password' required>
+        <div class='bg-top'>
+            <div class='bg-inner'></div>
+        </div>
+        <div class='bg-right'>
+            <div class='bg-inner'></div>
+        </div>
+        <div class='bg'>
+            <div class='bg-inner'></div>
+        </div>
+    </div>
+    <div class='control block-cube block-input'>
+        <!--        Userdescription-->
+        <input id="description" name="description" placeholder='Description' type='text' required>
+        <div class='bg-top'>
+            <div class='bg-inner'></div>
+        </div>
+        <div class='bg-right'>
+            <div class='bg-inner'></div>
+        </div>
+        <div class='bg'>
+            <div class='bg-inner'></div>
+        </div>
+    </div>
+    <!--    Maybe submit or not?-->
+    <button id="btn-save" class='btn block-cube block-cube-hover' type=submit>
+        <div class='bg-top'>
+            <div class='bg-inner'></div>
+        </div>
+        <div class='bg-right'>
+            <div class='bg-inner'></div>
+        </div>
+        <div class='bg'>
+            <div class='bg-inner'></div>
+        </div>
+        <div class='text'>
+            Register
+        </div>
+    </button>
+</form>
+<p id="status"></p>
+<p><a href="home.html">Back to Homepage</a></p>
+<!-- register end -->
+
+
+<script>
+
+
+    let USER_URL = sessionStorage.getItem("USER_URL");
+
+
+
+    document.getElementById("btn-save").onclick = (evt)=>{
+        evt.preventDefault()
+
+        const username = document.getElementById("username").value
+        const password = document.getElementById("password").value
+        const description = document.getElementById("description").value
+        const newUser = {
+            username,password,description}
+        const options = {
+            method: "POST",
+            headers : {
+                'Content-Type' : 'application/json'
+            },
+            body: JSON.stringify(newUser)
+        }
+        console.log(options)
+        fetch(USER_URL,options)
+            .then(res=>res.json())
+            .then(u=> {
+                document.getElementById("status").innerText = JSON.stringify(u)
+            })
+    }
+
+
+    function encode(str) {
+        str = "" + str
+        str = str.replace(/&/g, "&amp;");
+        str = str.replace(/>/g, "&gt;");
+        str = str.replace(/</g, "&lt;");
+        str = str.replace(/"/g, "&quot;");
+        str = str.replace(/'/g, "&#039;");
+        return str;
+    }
+
+</script>
+
+</body>
+</html>

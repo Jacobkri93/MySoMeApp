@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HomePage</title>
+    <link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+<h1>Welcome to the homepage🏠</h1>
+
+
+<p><a href="login.html">LOGIN</a></p>
+<p><a href="register.html">REGISTER</a></p>
+<hr>
+<h3>Here is todays posts🧾</h3>
+
+<!--Search posts -->
+
+<!--<div class=wrapper">-->
+<!--    <div class="header">-->
+<!--        <div class=title">-->
+<!--            Search on #-->
+<!--        </div>-->
+<!--        <div class="search_box">-->
+<!--            <input type="text" id="search_input" placeholder="Filter # ">-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <div class="table_wrap"></div>-->
+<!--    <div class="table_header"></div>-->
+<!--    <ul>-->
+<!--        <li>-->
+<!--            <div class="item">-->
+<!--                <div class="name">-->
+<!--                    <span>NAME</span>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </li>-->
+
+<!--    </ul>-->
+<!--</div>-->
+
+<div id="search-btn">
+    <label for="site-search">Search on #:</label>
+    <input autocomplete='off' type="search" id="site-search" name="q"
+           aria-label="Search through site content">
+
+    <button>🔍</button>
+</div>
+<!--search END-->
+
+<!--Post table-->
+<table class="table">
+    <thead>
+    <tr>
+        <th>| POSTED BY |</th>
+        <th>| # |</th>
+        <th>| CONTENT |</th>
+        <th>| TIMESTAMP |</th>
+        <th>⚙</th>
+        <th>🗑</th>
+        <th>| POST ID |</th>
+    </tr>
+    </thead>
+    <tbody id="tbody"></tbody>
+</table>
+<!--Post table END-->
+<hr>
+
+<h2>Post somthing!</h2>
+<p><a href="post.html">CREATE POST</a></p>
+<p id="status"></p>
+<hr>
+<hr>
+<h2>Settings</h2>
+<p><a href="editPost.html">EDIT POST</a></p>
+<p><a href="deletePost.html">DELETE POST</a></p>
+
+
+<script>
+
+    // let search_input = document.querySelector("#search_input");
+    //
+    // search_input.addEventListener("keyup", function(e){
+    //     let span_items = document.querySelectorAll(".table_data .row tr");
+    //     let table_body = document.querySelector(".table_body tr");
+    //     let search_item = e.target.value.toLowerCase();
+    //
+    //     span_items.forEach(function(item){
+    //         if(item.textContent.toLowerCase().indexOf(search_item) != -1){
+    //             item.closest("li").style.display = "block";
+    //         }
+    //         else{
+    //             item.closest("li").style.display = "none";
+    //         }
+    //     })
+    //
+    // });
+
+
+    sessionStorage.setItem("POST_URL", "api/post");
+    const POST_URL = sessionStorage.getItem("POST_URL");
+
+    sessionStorage.setItem("USER_URL", "api/user");
+    const USER_URL = sessionStorage.getItem("USER_URL");
+
+
+    fetch(POST_URL)
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (data) {
+            console.log(data);
+            makeRows(data)
+        });
+    console.log("")
+
+    function makeRows(data) {
+        const posts = data
+
+        const rows = posts.map(p => `
+         <tr>
+          <td>${("@JakeK")}</td>
+          <td>${(p.hashtag)}</td>
+          <td>${(p.content)}</td>
+          <td id="time">${(time)}</td>
+          <td><button type="button" id="btn-edit"></a>Edit</button></td>
+          <td><button type="button" id="btn-delete">Delete</button></td>
+          <td>${(p.id)}</td>
+</tr>
+        `)
+        document.getElementById("tbody").innerHTML = rows.join("")
+    }
+    const d = new Date();
+    //Converts the time into readable dateTimeStamp
+    let time = d.toLocaleString();
+    document.getElementById("time").innerHTML = time;
+
+
+
+
+
+
+
+
+    //Utility function to escape "untrusted inputs"
+    function encode(str) {
+        str = "" + str
+        str = str.replace(/&/g, "&amp;");
+        str = str.replace(/>/g, "&gt;");
+        str = str.replace(/</g, "&lt;");
+        str = str.replace(/"/g, "&quot;");
+        str = str.replace(/'/g, "&#039;");
+        return str;
+    }
+
+
+</script>
+
+
+</body>
+</html>

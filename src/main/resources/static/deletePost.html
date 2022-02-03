@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/input.css">
+
+</head>
+<body>
+
+
+<form autocomplete='off' id="login/register" class='loginregisterform'>
+    <div class='control'>
+    </div>
+
+    <div class='control block-cube block-input'>
+        <input id="post-id" placeholder="Add ID for post to delete">
+        <div class='bg-top'>
+            <div class='bg-inner'></div>
+        </div>
+        <div class='bg-right'>
+            <div class='bg-inner'></div>
+        </div>
+        <div class='bg'>
+            <div class='bg-inner'></div>
+        </div>
+    </div>
+
+    <!--    <div>-->
+    <!--        <input id="post-id" placeholder="Add the id on your post">-->
+    <!--        <button id="btn-find">Find post</button>-->
+    <!--    </div>-->
+    <p id="error-msg" style="color: red"></p>
+
+   <button class='btn block-cube block-cube-hover' id="btn-delete" type=submit>
+        <div class='bg-top'>
+            <div class='bg-inner'></div>
+        </div>
+        <div class='bg-right'>
+            <div class='bg-inner'></div>
+        </div>
+        <div class='bg'>
+            <div class='bg-inner'></div>
+        </div>
+        <div class='text'>
+            Delete this post ❌
+        </div>
+    </button>
+</form>
+<hr>
+
+
+<div>
+
+</div>
+
+<p id="status"></p>
+<p><a href="home.html">Back to homepage</a></p>
+
+<script>
+
+    const POST_URL = sessionStorage.getItem("POST_URL");
+
+    async function handleHttpErrorsAsync(res) {
+        if (!res.ok) {
+            const errorResponse = await res.json();
+            const error = new Error(errorResponse.message)
+            error.apiError = errorResponse
+            throw error
+        }
+        return res.json()
+    }
+
+    document.getElementById("btn-delete").onclick = (evt)=> { console.log(document.getElementById("post-id").value)
+        evt.preventDefault()
+        evt.stopPropagation()
+
+        const options = {
+            method: "DELETE",
+            headers: {'Content-Type': 'application/json'
+            }
+        }
+        fetch(POST_URL+"/"+document.getElementById("post-id").value,options)
+            .then(handleHttpErrorsAsync)
+            .then(res=>res.json())
+            .then(p=> document.getElementById("status").innerText =JSON.stringify(p))
+
+    }
+</script>
+
+
+</body>
+</html>
